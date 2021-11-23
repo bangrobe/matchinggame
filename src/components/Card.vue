@@ -1,7 +1,7 @@
 <template>
   <div class="card" @click="selectCard()">
     <div class="card-face is-front" v-if="visible">
-      {{ value }}
+      {{ value }} - {{ match }}
     </div>
     <div class="card-face is-back" v-else>Back</div>
   </div>
@@ -10,6 +10,11 @@
 <script>
 export default {
   props: {
+    match: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
     position: {
       type: Number,
       required: true,
@@ -28,6 +33,7 @@ export default {
     const selectCard = () => {
       context.emit("select-card", {
         position: props.position,
+        faceValue: props.value,
       });
     };
 
