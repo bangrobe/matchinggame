@@ -10,11 +10,12 @@
       @select-card="flipCard"
       :position="card.position"
     />
+    <p>{{ status }}</p>
   </section>
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import Card from "@/components/Card";
 export default {
   name: "App",
@@ -24,9 +25,27 @@ export default {
   setup() {
     const cardList = ref([]);
     const userSelection = ref([]);
+    //Lấy số cặp còn lại
+    //Kiểm tra các card trong cardList có match = false
+    //remainingPairs trả về một array nên phải có thêm length
+    const remainingPairs = computed(() => {
+      const remainingCards = cardList.value.filter(
+        (card) => card.match === false
+      ).length;
+      // prettier-ignore
+      return (remainingCards/2);
+    });
+
+    const status = computed(() => {
+      if (remainingPairs.value === 0) {
+        return "Player Win";
+      } else {
+        return `Remaining Pairs: ${remainingPairs.value}`;
+      }
+    });
     for (let i = 0; i < 16; i++) {
       cardList.value.push({
-        value: i,
+        value: 10,
         visible: false,
         position: i,
         match: false,
@@ -44,7 +63,6 @@ export default {
         userSelection.value[0] = payload;
       }
     };
-
     watch(
       userSelection,
       (currentValue) => {
@@ -72,11 +90,12 @@ export default {
       //To trigger array mutation, the deep option must be specific.
       { deep: true }
     );
-
     return {
       cardList,
       userSelection,
       flipCard,
+      remainingPairs,
+      status,
     };
   },
 };
