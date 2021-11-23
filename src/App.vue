@@ -1,5 +1,6 @@
 <template>
   <h1>Peek a Vue</h1>
+  <button @click="shuffleCards">Shuffle Cards</button>
   <section class="game-board">
     <Card
       v-for="(card, index) in cardList"
@@ -15,6 +16,7 @@
 </template>
 
 <script>
+import _ from "lodash";
 import { ref, watch, computed } from "vue";
 import Card from "@/components/Card";
 export default {
@@ -45,12 +47,16 @@ export default {
     });
     for (let i = 0; i < 16; i++) {
       cardList.value.push({
-        value: 10,
-        visible: false,
+        value: i,
+        visible: true,
         position: i,
         match: false,
       });
     }
+
+    const shuffleCards = () => {
+      cardList.value = _.shuffle(cardList.value);
+    };
     //Listen from emit event select-card from card component
     const flipCard = (payload) => {
       cardList.value[payload.position].visible = true;
@@ -96,6 +102,7 @@ export default {
       flipCard,
       remainingPairs,
       status,
+      shuffleCards,
     };
   },
 };
