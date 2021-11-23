@@ -28,6 +28,32 @@ export default {
   setup() {
     const cardList = ref([]);
     const userSelection = ref([]);
+
+    const cardItems = [1, 2, 3, 4, 5, 6, 7, 8];
+    //Thiết lập trong mỗi item thì chèn vào cardList 2 lần
+    cardItems.forEach((item) => {
+      cardList.value.push({
+        value: item,
+        visible: true,
+        position: null,
+        match: false,
+      });
+
+      cardList.value.push({
+        value: item,
+        visible: true,
+        position: null,
+        match: false,
+      });
+    });
+
+    //Với mỗi item trong cardList map với index mới
+    cardList.value = cardList.value.map((card, index) => {
+      return {
+        ...card,
+        position: index,
+      };
+    });
     //Lấy số cặp còn lại
     //Kiểm tra các card trong cardList có match = false
     //remainingPairs trả về một array nên phải có thêm length
@@ -46,14 +72,6 @@ export default {
         return `Remaining Pairs: ${remainingPairs.value}`;
       }
     });
-    for (let i = 0; i < 16; i++) {
-      cardList.value.push({
-        value: 9,
-        visible: false,
-        position: i,
-        match: false,
-      });
-    }
 
     const shuffleCards = () => {
       cardList.value = _.shuffle(cardList.value);
@@ -113,6 +131,7 @@ export default {
     );
     return {
       cardList,
+      cardItems,
       userSelection,
       flipCard,
       remainingPairs,
