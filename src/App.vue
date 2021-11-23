@@ -96,8 +96,19 @@ export default {
       //Truyền data từ hàm select-card ở component Card vào biến userSelection (là một Array)
       //Nếu giá trị đầu của userSelection đã có thì truyền vào giá trị thứ 2
       //Nếu không truyền vào giá trị thứ nhất của Array userSelection
+      //Fix tile match itself
+
       if (userSelection.value[0]) {
-        userSelection.value[1] = payload;
+        //Nếu userSelection position và faceValue bằng với giá trị data truyền vào
+        //Thì bỏ qua
+        if (
+          userSelection.value[0].position === payload.position &&
+          userSelection.value[0].faceValue === payload.faceValue
+        ) {
+          return;
+        } else {
+          userSelection.value[1] = payload;
+        }
       } else {
         userSelection.value[0] = payload;
       }
