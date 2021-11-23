@@ -1,6 +1,7 @@
 <template>
   <h1>Peek a Vue</h1>
   <button @click="shuffleCards">Shuffle Cards</button>
+  <button @click="restartGame">Restart Game</button>
   <section class="game-board">
     <Card
       v-for="(card, index) in cardList"
@@ -47,8 +48,8 @@ export default {
     });
     for (let i = 0; i < 16; i++) {
       cardList.value.push({
-        value: i,
-        visible: true,
+        value: 9,
+        visible: false,
         position: i,
         match: false,
       });
@@ -56,6 +57,20 @@ export default {
 
     const shuffleCards = () => {
       cardList.value = _.shuffle(cardList.value);
+    };
+
+    const restartGame = () => {
+      //Shuffle lại array cardList
+      shuffleCards();
+      // Map các phần tử trong cardList với match, position và visible mới
+      cardList.value = cardList.value.map((card, index) => {
+        return {
+          ...card,
+          match: false,
+          position: index,
+          visible: false,
+        };
+      });
     };
     //Listen from emit event select-card from card component
     const flipCard = (payload) => {
@@ -103,6 +118,7 @@ export default {
       remainingPairs,
       status,
       shuffleCards,
+      restartGame,
     };
   },
 };
