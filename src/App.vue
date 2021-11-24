@@ -28,6 +28,7 @@ Phải thay đổi :key="index" sang :key="${card-value} - ${card-variant}" vì 
 */
 import _ from "lodash";
 import { ref, watch, computed } from "vue";
+import { launchConfetti } from "./utilities/confetti";
 import Card from "@/components/Card";
 export default {
   name: "App",
@@ -133,6 +134,12 @@ export default {
         userSelection.value[0] = payload;
       }
     };
+
+    watch(remainingPairs, (currentValue) => {
+      if (currentValue === 0) {
+        launchConfetti();
+      }
+    });
     watch(
       userSelection,
       (currentValue) => {
