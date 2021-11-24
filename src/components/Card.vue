@@ -1,5 +1,5 @@
 <template>
-  <div class="card" @click="selectCard()">
+  <div class="card" @click="selectCard()" :class="flipStyle">
     <div class="card-face is-front" v-if="visible">
       <img :src="`/images/${value}.png`" :alt="value" />
       <img
@@ -8,11 +8,12 @@
         class="icon-checkmark"
       />
     </div>
-    <div class="card-face is-back" v-else>Back</div>
+    <div class="card-face is-back">Back</div>
   </div>
 </template>
 
 <script>
+import { computed } from "vue";
 export default {
   props: {
     match: {
@@ -35,6 +36,9 @@ export default {
     },
   },
   setup(props, context) {
+    const flipStyle = computed(() => {
+      return props.visible ? "is-flipped" : "";
+    });
     const selectCard = () => {
       context.emit("select-card", {
         position: props.position,
@@ -44,6 +48,7 @@ export default {
 
     return {
       selectCard,
+      flipStyle,
     };
   },
 };
@@ -56,16 +61,20 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.5s ease-in;
+  transform-style: preserve-3d;
 }
 .card-face {
   width: 100%;
   height: 100%;
   position: absolute;
   border-radius: 5px;
+  backface-visibility: hidden;
 }
 .card-face.is-front {
   background-image: url("/images/card-bg.png");
   color: white;
+  transform: rotateY(180deg);
 }
 .card-face.is-back {
   background-color: blue;
@@ -76,5 +85,8 @@ export default {
   position: absolute;
   bottom: 5%;
   right: 5%;
+}
+.card.is-flipped {
+  transform: rotateY(180deg);
 }
 </style>
