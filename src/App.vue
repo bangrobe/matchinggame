@@ -1,18 +1,17 @@
 <template>
   <img src="/images/peek-a-vue-title.png" alt="Peek a vue" />
-  <button @click="shuffleCards">Shuffle Cards</button>
 
-  <section class="game-board">
+  <transition-group tag="section" class="game-board" name="shuffle-cards">
     <Card
-      v-for="(card, index) in cardList"
-      :key="`$card-${index}`"
+      v-for="card in cardList"
+      :key="`${card.value} - ${card.variant}`"
       :value="card.value"
       :visible="card.visible"
       :match="card.match"
       @select-card="flipCard"
       :position="card.position"
     />
-  </section>
+  </transition-group>
   <div>
     <p>{{ status }}</p>
     <button @click="restartGame" class="button">Restart Game</button>
@@ -20,6 +19,13 @@
 </template>
 
 <script>
+/*
+Shuffle Cards Animation
+Vue hỗ trợ một kỹ thuật gọi là transition-group
+https://v3.vuejs.org/guide/transitions-enterleave.html#transition-classes
+Phải thay đổi :key="index" sang :key="${card-value} - ${card-variant}" vì khi shuffle thì index vẫn không đổi, nên transition không thực hiện được
+
+*/
 import _ from "lodash";
 import { ref, watch, computed } from "vue";
 import Card from "@/components/Card";
@@ -46,6 +52,7 @@ export default {
     cardItems.forEach((item) => {
       cardList.value.push({
         value: item,
+        variant: 1,
         visible: false,
         position: null,
         match: false,
@@ -53,6 +60,7 @@ export default {
 
       cardList.value.push({
         value: item,
+        variant: 2,
         visible: false,
         position: null,
         match: false,
@@ -209,5 +217,9 @@ h1 {
 .button:hover {
   background-color: orangered;
   transition: all 0.5s;
+}
+
+.shuffle-cards-move {
+  transition: transform 0.8s ease-in;
 }
 </style>

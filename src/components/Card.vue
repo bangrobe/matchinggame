@@ -8,7 +8,7 @@
         class="icon-checkmark"
       />
     </div>
-    <div class="card-face is-back">Back</div>
+    <div class="card-face is-back"></div>
   </div>
 </template>
 
