@@ -1,7 +1,7 @@
 <template>
-  <h1>Peek a Vue</h1>
+  <img src="/images/peek-a-vue-title.png" alt="Peek a vue" />
   <button @click="shuffleCards">Shuffle Cards</button>
-  <button @click="restartGame">Restart Game</button>
+
   <section class="game-board">
     <Card
       v-for="(card, index) in cardList"
@@ -12,8 +12,11 @@
       @select-card="flipCard"
       :position="card.position"
     />
-    <p>{{ status }}</p>
   </section>
+  <div>
+    <p>{{ status }}</p>
+    <button @click="restartGame" class="button">Restart Game</button>
+  </div>
 </template>
 
 <script>
@@ -29,7 +32,16 @@ export default {
     const cardList = ref([]);
     const userSelection = ref([]);
 
-    const cardItems = [1, 2, 3, 4, 5, 6, 7, 8];
+    const cardItems = [
+      "bat",
+      "candy",
+      "cauldron",
+      "cupcake",
+      "ghost",
+      "moon",
+      "pumpkin",
+      "witch-hat",
+    ];
     //Thiết lập trong mỗi item thì chèn vào cardList 2 lần
     cardItems.forEach((item) => {
       cardList.value.push({
@@ -157,12 +169,45 @@ export default {
 </script>
 
 <style>
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+#app {
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: antialiased;
+  text-align: center;
+  color: #2c3e50;
+  background-image: url("../public/images/page-bg.png");
+  background-color: #00070c;
+  height: 100vh;
+  color: white;
+  padding-top: 60px;
+}
+
+h1 {
+  margin-top: 0;
+}
 .game-board {
   display: grid;
-  grid-template-columns: 100px 100px 100px 100px;
-  grid-template-rows: 100px 100px 100px 100px;
-  grid-column-gap: 30px;
-  grid-row-gap: 30px;
+  grid-template-columns: repeat(4, 120px);
+  grid-template-rows: repeat(4, 120px);
+  grid-column-gap: 24px;
+  grid-row-gap: 24px;
   justify-content: center;
+}
+.button {
+  padding: 10px 20px;
+  background-color: orange;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  border: none;
+}
+.button:hover {
+  background-color: orangered;
+  transition: all 0.5s;
 }
 </style>
