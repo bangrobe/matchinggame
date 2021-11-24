@@ -14,7 +14,10 @@
   </transition-group>
   <div>
     <p>{{ status }}</p>
-    <button @click="restartGame" class="button">Restart Game</button>
+    <button @click="startGame" class="button" v-if="newPlayer">
+      Start Game
+    </button>
+    <button @click="restartGame" class="button" v-else>Restart Game</button>
   </div>
 </template>
 
@@ -38,6 +41,7 @@ export default {
   setup() {
     const cardList = ref([]);
     const userSelection = ref([]);
+    const newPlayer = ref(true);
 
     const cardItems = [
       "bat",
@@ -96,6 +100,11 @@ export default {
 
     const shuffleCards = () => {
       cardList.value = _.shuffle(cardList.value);
+    };
+
+    const startGame = () => {
+      newPlayer.value = false;
+      restartGame();
     };
 
     const restartGame = () => {
@@ -173,11 +182,13 @@ export default {
       cardList,
       cardItems,
       userSelection,
+      newPlayer,
       flipCard,
       remainingPairs,
       status,
       shuffleCards,
       restartGame,
+      startGame,
     };
   },
 };
